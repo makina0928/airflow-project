@@ -102,8 +102,6 @@ services:
   airflow-apiserver:
     <<: *airflow-common
     command: api-server
-    expose:
-      - 8080
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/api/v2/version"]
       interval: 30s
@@ -115,20 +113,21 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+    expose:
+      - 8080
     networks:
       - dokploy-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.airflow-apiserver.rule=Host(`elt.zamdatalabs.com`)"
-      - "traefik.http.routers.airflow-apiserver.entrypoints=websecure"
-      - "traefik.http.routers.airflow-apiserver.tls.certresolver=letsencrypt"
-      - "traefik.http.services.airflow-apiserver.loadbalancer.server.port=8080"
-      # HTTP → HTTPS redirect
-      - "traefik.http.routers.airflow-apiserver-redirect.entrypoints=web"
-      - "traefik.http.routers.airflow-apiserver-redirect.rule=Host(`elt.zamdatalabs.com`)"
-      - "traefik.http.routers.airflow-apiserver-redirect.middlewares=redirect-to-https@docker"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.airflow.rule=Host(`elt.zamdatalabs.com`)"
+        - "traefik.http.routers.airflow.entrypoints=websecure"
+        - "traefik.http.routers.airflow.tls.certresolver=letsencrypt"
+        - "traefik.http.services.airflow.loadbalancer.server.port=8080"
+        - "traefik.http.routers.airflow-redirect.entrypoints=web"
+        - "traefik.http.routers.airflow-redirect.rule=Host(`elt.zamdatalabs.com`)"
+        - "traefik.http.routers.airflow-redirect.middlewares=redirect-to-https@docker"
+        - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
   airflow-scheduler:
     <<: *airflow-common
