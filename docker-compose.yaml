@@ -116,6 +116,25 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.airflow.rule=Host(`elt.zamdatalabs.com`)"
+      - "traefik.http.routers.airflow.entrypoints=websecure"
+      - "traefik.http.routers.airflow.tls.certresolver=letsencrypt"
+      - "traefik.http.services.airflow.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.airflow-auth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      - "traefik.http.routers.airflow.middlewares=airflow-auth@docker"
+      - "traefik.http.routers.airflow-redirect.entrypoints=web"
+      - "traefik.http.routers.airflow-redirect.rule=Host(`elt.zamdatalabs.com`)"
+      - "traefik.http.routers.airflow-redirect.middlewares=redirect-to-https@docker"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+networks:
+  dokploy-network:
+    external: true
+
+
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
