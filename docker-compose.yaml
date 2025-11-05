@@ -321,6 +321,8 @@ x-airflow-common:
     - /root/datascience/airflow/logs:/opt/airflow/logs
     - /root/datascience/airflow/config:/opt/airflow/config
     - /root/datascience/airflow/plugins:/opt/airflow/plugins
+    - /root/datascience/data_extraction:/opt/airflow/data_extraction
+    - /root/datascience/data_transformation:/opt/airflow/data_transformation
 
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
