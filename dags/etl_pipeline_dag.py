@@ -54,7 +54,7 @@ with DAG(
     dag_id="etl_pipeline_dlt_dbt",
     description="Daily DLT → DBT ETL pipeline (dbt Core)",
     start_date=datetime(2025, 10, 20),
-    schedule_interval="10 1 * * *",  # 01:10 UTC = 04:10 Nairobi
+    schedule="10 1 * * *",  # 01:10 UTC = 04:10 Nairobi
     catchup=False,
     default_args={
         "owner": "airflow",
