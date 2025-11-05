@@ -52,7 +52,7 @@ def run_dlt_load():
 # ==================== #
 with DAG(
     dag_id="etl_pipeline_dlt_dbt",
-    description="Daily DLT → DBT ETL pipeline (dbt Core)",
+    description="Daily DLT → DBT ELT pipeline (dbt Core)",
     start_date=datetime(2025, 10, 20),
     schedule="10 1 * * *",  # 01:10 UTC = 04:10 Nairobi
     catchup=False,
