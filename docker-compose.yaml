@@ -317,10 +317,10 @@ x-airflow-common:
   #   - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
   #   - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
   volumes:
-    - ./dags:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
-    - ./config:/opt/airflow/config
-    - ./plugins:/opt/airflow/plugins
+    - /root/datascience/airflow/dags:/opt/airflow/dags
+    - /root/datascience/airflow/logs:/opt/airflow/logs
+    - /root/datascience/airflow/config:/opt/airflow/config
+    - /root/datascience/airflow/plugins:/opt/airflow/plugins
 
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
